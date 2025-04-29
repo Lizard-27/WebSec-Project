@@ -1,10 +1,16 @@
 <?php
 namespace App\Http\Controllers\Web;
 
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DB;
@@ -16,6 +22,33 @@ use App\Models\User;
 class UsersController extends Controller {
 
 	use ValidatesRequests;
+
+public function redirectToGoogle()
+{
+    return Socialite::driver('google')->redirect();
+}
+
+public function handleGoogleCallback()
+{
+    try {
+        $googleUser = Socialite::driver('google')->user();
+
+        $user = User::firstOrCreate([
+            'email' => $googleUser->getEmail(),
+        ], [
+            'name' => $googleUser->getName(),
+            'password' => bcrypt(Str::random(16)), 
+        ]);
+
+        Auth::login($user);
+
+        return redirect('/'); 
+
+    } catch (\Exception $e) {
+        return redirect('/login')->withErrors(['msg' => 'Google login failed.']);
+    }
+}
+
 
     public function list(Request $request) {
         if(!auth()->user()->hasPermissionTo('show_users'))abort(401);

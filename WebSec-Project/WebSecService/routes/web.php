@@ -17,6 +17,8 @@ Route::get('users/delete/{user}', [UsersController::class, 'delete'])->name('use
 Route::get('users/edit_password/{user?}', [UsersController::class, 'editPassword'])->name('edit_password');
 Route::post('users/save_password/{user}', [UsersController::class, 'savePassword'])->name('save_password');
 
+Route::get('auth/google', [UsersController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback', [UsersController::class, 'handleGoogleCallback']);
 
 
 Route::get('products', [ProductsController::class, 'list'])->name('products_list');
@@ -26,22 +28,4 @@ Route::get('products/delete/{product}', [ProductsController::class, 'delete'])->
 
 Route::get('/', function () {
     return view('welcome');
-});
-
-Route::get('/multable', function (Request $request) {
-    $j = $request->number??5;
-    $msg = $request->msg;
-    return view('multable', compact("j", "msg"));
-});
-
-Route::get('/even', function () {
-    return view('even');
-});
-
-Route::get('/prime', function () {
-    return view('prime');
-});
-
-Route::get('/test', function () {
-    return view('test');
 });
