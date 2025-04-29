@@ -23,6 +23,37 @@ class UsersController extends Controller {
 
 	use ValidatesRequests;
 
+    public function redirectToTwitter()
+    {
+        return Socialite::driver('twitter')->redirect();
+    }
+
+    /** Handle callback from Twitter */
+    public function handleTwitterCallback()
+    {
+        try {
+            $twitterUser = Socialite::driver('twitter')->user();
+
+            // Note: Twitter may not provide email by default.
+            // If you require email, ensure you have permission and Twitter API configured.
+
+            // Find or create the user
+            $user = User::firstOrCreate(
+                ['email' => $twitterUser->getEmail() ?? 'twitter_'.$twitterUser->getId().'@example.com'],
+                [
+                    'name'     => $twitterUser->getName() ?? $twitterUser->getNickname(),
+                    'password' => bcrypt(Str::random(24)),
+                ]
+            );
+
+            Auth::login($user);
+
+            return redirect('/')->with('status', 'Logged in with Twitter!');
+        } catch (\Exception $e) {
+            return redirect('/login')->withErrors('Twitter login failed: '.$e->getMessage());
+        }
+    }
+
 public function redirectToGoogle()
 {
     return Socialite::driver('google')->redirect();

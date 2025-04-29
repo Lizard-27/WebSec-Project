@@ -20,6 +20,11 @@ Route::post('users/save_password/{user}', [UsersController::class, 'savePassword
 Route::get('auth/google', [UsersController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('auth/google/callback', [UsersController::class, 'handleGoogleCallback']);
 
+Route::get('auth/twitter', [UsersController::class, 'redirectToTwitter'])
+     ->name('auth.twitter');
+
+Route::get('auth/twitter/callback', [UsersController::class, 'handleTwitterCallback']);
+
 
 Route::get('products', [ProductsController::class, 'list'])->name('products_list');
 Route::get('products/edit/{product?}', [ProductsController::class, 'edit'])->name('products_edit');
