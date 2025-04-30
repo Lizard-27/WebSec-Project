@@ -28,6 +28,9 @@
     Login with Twitter
   </a>
 </div>
+<a href="{{ route('auth.github') }}" class="btn btn-dark">
+  <i class="fab fa-github"></i> Login with GitHub
+</a>
 
       <div class="mb-3 text-center">
         <a href="{{ route('auth.google') }}" class="btn btn-danger">Login with Google</a>
