@@ -22,8 +22,10 @@ Route::get('auth/google/callback', [UsersController::class, 'handleGoogleCallbac
 
 Route::get('auth/twitter', [UsersController::class, 'redirectToTwitter'])
      ->name('auth.twitter');
-
 Route::get('auth/twitter/callback', [UsersController::class, 'handleTwitterCallback']);
+
+Route::get('auth/github', [UsersController::class, 'redirectToGitHub'])->name('auth.github');
+Route::get('auth/github/callback', [UsersController::class, 'handleGitHubCallback']);
 
 
 Route::get('products', [ProductsController::class, 'list'])->name('products_list');

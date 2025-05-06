@@ -23,6 +23,35 @@ class UsersController extends Controller {
 
 	use ValidatesRequests;
 
+    public function redirectToGitHub()
+    {
+        return Socialite::driver('github')->redirect();
+    }
+
+    /** Handle GitHub callback */
+    public function handleGitHubCallback()
+    {
+        try {
+            $githubUser = Socialite::driver('github')->user();
+
+            // Find or create user
+            $user = User::firstOrCreate(
+                ['email' => $githubUser->getEmail()],
+                [
+                    'name'     => $githubUser->getName() ?? $githubUser->getNickname(),
+                    'password' => bcrypt(Str::random(24)),
+                ]
+            );
+
+            Auth::login($user);
+
+            return redirect('/')->with('status', 'Logged in with GitHub!');
+        } catch (\Exception $e) {
+            return redirect('/login')->withErrors('GitHub login failed.');
+        }
+    }
+
+
     public function redirectToTwitter()
     {
         return Socialite::driver('twitter')->redirect();
