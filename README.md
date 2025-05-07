@@ -1,14 +1,10 @@
 ﻿# WebSec-Project
-#This web project involves developing a comprehensive system that can function as either a Products Store or a School Management System (or #a similar system). The key features include:
-
-#1. *Multi-Role System*: At least 5 distinct roles (e.g., Admin, Teacher, Student, Customer, Manager) with tailored permissions.
-#2. *Role Management*: An admin can create and modify roles using a role editor.
-#3. *User Authentication*: Includes login, registration, email verification, and password recovery.
-#4. *Social Login*: Integration with social media platforms for seamless authentication.
-#5. *Security*: Hosted locally with SSI (Server-Side Includes) security measures.
-#6. *Mobile Support*: APIs for mobile interaction (customer-focused), published on Postman for testing.
-#7. *Collaborative Development*: Managed via a dedicated GitHub account with contributions from all team members.
-#8. *Demo & Evaluation*: Includes a practical exam demo followed by individual discussions and on-the-spot modifications.
-
+Pizza Store Management System - Project Description 
+This web project is a  Pizza Store Management System designed to handle orders, deliveries, and store operations efficiently. The system includes  five key roles with specific permissions:  
+1.Employee– Full control over the system, including user management and settings.  
+2. Manager– Oversees orders, inventory, staff, and finances.  
+3. Chef – Handles pizza preparation, updates order statuses, and manages kitchen workflow.  
+4. Delivery Employee – Tracks and fulfills delivery orders, updates delivery status.  
+5. Customer – Places orders, makes payments, and tracks order status.
 
 # WebSec-Project
