@@ -1,85 +1,93 @@
 @extends('layouts.master')
-@section('title', 'Test Page')
+@section('title', 'Products')
 @section('content')
-<div class="row mt-2">
-    <div class="col col-10">
-        <h1>Products</h1>
+
+<!-- Success & Error Messages -->
+@if(session('success'))
+  <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+@if(session('error'))
+  <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
+
+<div class="row mt-2 mb-3">
+  <div class="col-8"><h1>Products</h1></div>
+  @auth
+    <div class="col-2">
+      <a href="{{ route('my_purchases') }}" class="btn btn-info w-100">My Purchases</a>
     </div>
-    <div class="col col-2">
-        @can('add_products')
-        <a href="{{route('products_edit')}}" class="btn btn-success form-control">Add Product</a>
-        @endcan
-    </div>
+  @endauth
+  <div class="col-2">
+    @can('add_products')
+      <a href="{{ route('products_edit') }}" class="btn btn-success w-100">Add Product</a>
+    @endcan
+  </div>
 </div>
-<form>
-    <div class="row">
-        <div class="col col-sm-2">
-            <input name="keywords" type="text"  class="form-control" placeholder="Search Keywords" value="{{ request()->keywords }}" />
-        </div>
-        <div class="col col-sm-2">
-            <input name="min_price" type="numeric"  class="form-control" placeholder="Min Price" value="{{ request()->min_price }}"/>
-        </div>
-        <div class="col col-sm-2">
-            <input name="max_price" type="numeric"  class="form-control" placeholder="Max Price" value="{{ request()->max_price }}"/>
-        </div>
-        <div class="col col-sm-2">
-            <select name="order_by" class="form-select">
-                <option value="" {{ request()->order_by==""?"selected":"" }} disabled>Order By</option>
-                <option value="name" {{ request()->order_by=="name"?"selected":"" }}>Name</option>
-                <option value="price" {{ request()->order_by=="price"?"selected":"" }}>Price</option>
-            </select>
-        </div>
-        <div class="col col-sm-2">
-            <select name="order_direction" class="form-select">
-                <option value="" {{ request()->order_direction==""?"selected":"" }} disabled>Order Direction</option>
-                <option value="ASC" {{ request()->order_direction=="ASC"?"selected":"" }}>ASC</option>
-                <option value="DESC" {{ request()->order_direction=="DESC"?"selected":"" }}>DESC</option>
-            </select>
-        </div>
-        <div class="col col-sm-1">
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-        <div class="col col-sm-1">
-            <button type="reset" class="btn btn-danger">Reset</button>
-        </div>
+
+<form class="mb-3">
+  <div class="row gx-2">
+    <div class="col-sm-3">
+      <input name="keywords" type="text" class="form-control" placeholder="Search…" value="{{ request('keywords') }}" />
     </div>
+    <div class="col-sm-2">
+      <input name="min_price" type="number" class="form-control" placeholder="Min $" value="{{ request('min_price') }}"/>
+    </div>
+    <div class="col-sm-2">
+      <input name="max_price" type="number" class="form-control" placeholder="Max $" value="{{ request('max_price') }}"/>
+    </div>
+    <div class="col-sm-2">
+      <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+  </div>
 </form>
 
+<div class="row g-3">
+  @foreach($products as $product)
+    <div class="col-md-4">
+      <div class="card h-100">
+        <img src="{{ asset("images/{$product->photo}") }}"
+             class="card-img-top"
+             alt="{{ $product->name }}"
+             style="object-fit: cover; height: 180px;">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ $product->name }}</h5>
+          <p class="card-text mb-1">
+            <strong>Price:</strong> ${{ number_format($product->price,2) }}
+          </p>
+          <p class="card-text mb-3">
+            <strong>Stock:</strong>
+            @if($product->quantity > 0)
+              <span class="badge bg-success">{{ $product->quantity }}</span>
+            @else
+              <span class="badge bg-secondary">Out of Stock</span>
+            @endif
+          </p>
 
-@foreach($products as $product)
-    <div class="card mt-2">
-        <div class="card-body">
-            <div class="row">
-                <div class="col col-sm-12 col-lg-4">
-                    <img src="{{asset("images/$product->photo")}}" class="img-thumbnail" alt="{{$product->name}}" width="100%">
-                </div>
-                <div class="col col-sm-12 col-lg-8 mt-3">
-                    <div class="row mb-2">
-					    <div class="col-8">
-					        <h3>{{$product->name}}</h3>
-					    </div>
-					    <div class="col col-2">
-                            @can('edit_products')
-					        <a href="{{route('products_edit', $product->id)}}" class="btn btn-success form-control">Edit</a>
-                            @endcan
-					    </div>
-					    <div class="col col-2">
-                            @can('delete_products')
-					        <a href="{{route('products_delete', $product->id)}}" class="btn btn-danger form-control">Delete</a>
-                            @endcan
-					    </div>
-					</div>
-
-                    <table class="table table-striped">
-                        <tr><th width="20%">Name</th><td>{{$product->name}}</td></tr>
-                        <tr><th>Model</th><td>{{$product->model}}</td></tr>
-                        <tr><th>Code</th><td>{{$product->code}}</td></tr>
-                        <tr><th>Price</th><td>{{$product->price}}</td>
-                        <tr><th>Description</th><td>{{$product->description}}</td></tr>
-                    </table>
-                </div>
-            </div>
+          <!-- Buy Button -->
+          @auth
+            @if($product->quantity > 0 && auth()->user()->credit >= $product->price)
+              <a href="{{ route('products.show', $product->id) }}"
+                 class="btn btn-primary mt-auto">
+                Buy
+              </a>
+            @elseif($product->quantity > 0)
+              <button class="btn btn-secondary mt-auto" disabled>
+                Insufficient Credit
+              </button>
+            @else
+              <button class="btn btn-secondary mt-auto" disabled>
+                Out of Stock
+              </button>
+            @endif
+          @else
+            <a href="{{ route('login') }}" class="btn btn-warning mt-auto">
+              Login to Buy
+            </a>
+          @endauth
         </div>
+      </div>
     </div>
-@endforeach
+  @endforeach
+</div>
+
 @endsection

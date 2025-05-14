@@ -36,6 +36,11 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    public function purchases()
+    {
+        return $this->belongsToMany(Product::class)
+                    ->withTimestamps(); 
+    }
 
     /**
      * Get the attributes that should be cast.
