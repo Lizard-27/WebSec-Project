@@ -6,6 +6,8 @@
   <title>@yield('title')</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"/>
+
 
   <style>
     body {
@@ -73,27 +75,53 @@
 </head>
 <body>
 
-  <header class="header-wrapper mt-0">
-    <div class="custom-header">
-      <div class="left">
-        <a href="{{ route('products_list') }}">Products</a>
-      </div>
-
-      <div class="center">
-        Welcome
-      </div>
-
-      <div class="right">
-        @auth
-          <a href="{{ route('profile') }}" title="Profile"><i class="bi bi-person-circle"></i></a>
-          <a href="{{ route('do_logout') }}" title="Logout"><i class="bi bi-box-arrow-right"></i></a>
-        @else
-          <a href="{{ route('login') }}" title="Login"><i class="bi bi-box-arrow-in-right"></i></a>
-          <a href="{{ route('register') }}" title="Register"><i class="bi bi-person-plus"></i></a>
-        @endauth
-      </div>
+<header class="header-wrapper mt-0">
+  <div class="custom-header">
+    <div class="left">
+      <a href="{{ route('products_list') }}">Products</a>
     </div>
-  </header>
+
+    <div class="center">
+      Welcome
+    </div>
+
+    <div class="right">
+      @auth
+        {{-- Cart Icon with Badge --}}
+        @php
+          $count = auth()->user()->cart?->items->sum('quantity') ?? 0;
+        @endphp
+        <a href="{{ route('cart.index') }}" title="Cart" class="position-relative">
+          <i class="bi bi-cart"></i>
+          @if($count > 0)
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            >
+              {{ $count }}
+              <span class="visually-hidden">cart items</span>
+            </span>
+          @endif
+        </a>
+
+        {{-- Profile & Logout --}}
+        <a href="{{ route('profile') }}" title="Profile">
+          <i class="bi bi-person-circle"></i>
+        </a>
+        <a href="{{ route('do_logout') }}" title="Logout">
+          <i class="bi bi-box-arrow-right"></i>
+        </a>
+      @else
+        <a href="{{ route('login') }}" title="Login">
+          <i class="bi bi-box-arrow-in-right"></i>
+        </a>
+        <a href="{{ route('register') }}" title="Register">
+          <i class="bi bi-person-plus"></i>
+        </a>
+      @endauth
+    </div>
+  </div>
+</header>
+
 
   <div class="container">
     <h1>@yield('header')</h1>

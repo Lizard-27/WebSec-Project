@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\ProductsController;
 use App\Http\Controllers\Web\UsersController;
+use App\Http\Controllers\Web\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +67,8 @@ Route::get('my-purchases', [ProductsController::class, 'myProducts'])
      ->middleware('auth');
 
 // 5️⃣ Admin: add/edit/delete products
+Route::get('products/create', [ProductsController::class, 'edit'])
+     ->name('products_create');
 Route::get('products/edit/{product?}', [ProductsController::class, 'edit'])
      ->name('products_edit')
      ->middleware('auth');
@@ -75,6 +78,52 @@ Route::post('products/save/{product?}', [ProductsController::class, 'save'])
 Route::get('products/delete/{product}', [ProductsController::class, 'delete'])
      ->name('products_delete')
      ->middleware('auth');
+
+
+
+Route::middleware('auth')->group(function(){
+    Route::get('cart', [CartController::class,'index'])->name('cart.index');
+    Route::post('cart/add/{product}', [CartController::class,'add'])->name('cart.add');
+    Route::post('cart/item/{item}/update', [CartController::class,'update'])->name('cart.update');
+    Route::delete('cart/item/{item}', [CartController::class,'remove'])->name('cart.remove');
+    Route::post('cart/checkout', [CartController::class,'checkout'])
+         ->name('cart.checkout');
+    Route::get('cart', [CartController::class,'index'])
+         ->name('cart.index');
+});
+
+
+
+
+
+// OIDC discovery document
+Route::get('/.well-known/openid-configuration', function () {
+    $base = url('/');
+    return response()->json([
+        'issuer'                             => $base,
+        'authorization_endpoint'            => $base . '/oauth/authorize',
+        'token_endpoint'                    => $base . '/oauth/token',
+        'jwks_uri'                          => $base . '/oauth/jwks',
+        'response_types_supported'          => ['code', 'token', 'id_token'],
+        'subject_types_supported'           => ['public'],
+        'id_token_signing_alg_values_supported' => ['RS256'],
+        'scopes_supported'                  => ['openid', 'profile', 'email'],
+    ]);
+});
+
+// JWKS (public keys) endpoint
+Route::get('/oauth/jwks', function () {
+    $key = trim(file_get_contents(storage_path('oauth-public.key')));
+    $jwk = \Firebase\JWT\JWK::parseKeySet(['keys' => [\Firebase\JWT\JWT::parseKey($key)]]);
+    return response()->json($jwk);
+});
+
+Route::get('/callback', function (Request $request) {
+    // Dump out everything so you can see the `code` parameter
+    return response()->json($request->all());
+});
+
+
 
 /*
 |--------------------------------------------------------------------------
