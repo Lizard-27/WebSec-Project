@@ -24,6 +24,8 @@ Route::get('auth/twitter',  [UsersController::class, 'redirectToTwitter']) ->nam
 Route::get('auth/twitter/callback', [UsersController::class, 'handleTwitterCallback']);
 Route::get('auth/github',   [UsersController::class, 'redirectToGitHub'])  ->name('auth.github');
 Route::get('auth/github/callback', [UsersController::class, 'handleGitHubCallback']);
+Route::get('auth/facebook', [UsersController::class, 'redirectToFacebook'])->name('redirectToFacebook');
+Route::get('auth/facebook/callback', [UsersController::class, 'handleFacebookCallback'])->name('handleFacebookCallback');
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +39,8 @@ Route::post('users/save/{user}',  [UsersController::class, 'save'])       ->name
 Route::get('users/delete/{user}', [UsersController::class, 'delete'])     ->name('users_delete');
 Route::get('users/edit_password/{user?}', [UsersController::class, 'editPassword']) ->name('edit_password');
 Route::post('users/save_password/{user}', [UsersController::class, 'savePassword']) ->name('save_password');
+Route::get('/users/{user}/add-role', [UsersController::class, 'addRole'])->name('users_add_role');
+Route::post('/users/{user}/add-role', [UsersController::class, 'saveRole'])->name('users_add_role');
 
 /*
 |--------------------------------------------------------------------------
