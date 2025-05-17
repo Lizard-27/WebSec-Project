@@ -26,7 +26,7 @@
         flex: 1;
         background:
             linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-            url('https://ik.imagekit.io/jyx7871cz/73.jpg?updatedAt=1747485666219') no-repeat center center;
+            url('https://ik.imagekit.io/jyx7871cz/gradient_2.jpg?updatedAt=1747489283026') no-repeat center center;
         background-size: cover;
     }
 
@@ -85,7 +85,7 @@
         width: 100%;
         padding: 1rem;
         border-radius: 0.5rem;
-        background: rgb(222, 94, 20);
+        background: rgb(18, 61, 168));
         color: white;
         border: none;
         font-weight: bold;
@@ -94,7 +94,7 @@
     }
 
     .btn-primary:hover {
-        background: rgb(222, 141, 28);
+        background: rgb(28, 83, 222);
     }
 
     .social-buttons {
