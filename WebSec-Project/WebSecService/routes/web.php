@@ -128,7 +128,15 @@ Route::get('/callback', function (Request $request) {
 });
 
 
-
+Route::middleware('auth')
+     ->prefix('delivery')
+     ->name('delivery.')
+     ->group(function () {
+         Route::get('/',                  [DeliveryController::class, 'index'])   ->name('index');
+         Route::post('{order}/accept',    [DeliveryController::class, 'accept'])  ->name('accept');
+         Route::get('{order}',            [DeliveryController::class, 'show'])    ->name('show');
+         Route::post('{order}/confirm',   [DeliveryController::class, 'confirm']) ->name('confirm');
+     });
 /*
 |--------------------------------------------------------------------------
 | Misc Pages
