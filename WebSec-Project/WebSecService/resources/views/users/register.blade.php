@@ -24,7 +24,7 @@
         flex: 1;
         background: 
             linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)),
-            url('https://ik.imagekit.io/jyx7871cz/gradient_2.jpg?updatedAt=1747489283026') no-repeat center center;
+            url('https://ik.imagekit.io/jyx7871cz/2149013723(1).jpg') no-repeat center center;
         background-size: cover;
         display: flex;
         align-items: center;
@@ -130,12 +130,12 @@
     }
     
     .btn-primary {
-        background:rgb(22, 61, 160);
+        background: #dc143c;
         color: white;
     }
     
     .btn-primary:hover {
-        background:rgb(28, 83, 222);
+        background: #b11236;
     }
     
     .login-link {

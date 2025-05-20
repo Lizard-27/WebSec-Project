@@ -1,55 +1,217 @@
 @extends('layouts.master')
 @section('title', 'Products')
 @section('content')
+<style>
+    body {
+        min-height: 100vh;
+        background:
+            linear-gradient(rgba(220,20,60,0.07), rgba(220,20,60,0.07)),
+            url('https://ik.imagekit.io/jyx7871cz/2149013658.jpg') no-repeat center center fixed;
+        background-size: cover;
+        color: #222;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .products-main-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 20px 0 30px 0;
+    }
+    h1 {
+        font-size: 2.4rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        color: #dc143c;
+        text-shadow: 0 2px 8px rgba(220,20,60,0.08);
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    .top-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .product-row-card {
+        background: #fff;
+        border: 1.5px solid #dc143c33;
+        border-radius: 1.1rem;
+        box-shadow: 0 6px 24px 0 rgba(220,20,60,0.10);
+        color: #222;
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: stretch;
+        transition: box-shadow 0.2s;
+        width: 100%;
+        min-height: 180px;
+    }
+    .product-row-card:hover {
+        box-shadow: 0 10px 32px 0 rgba(220,20,60,0.18);
+    }
+    .product-img {
+        border-top-left-radius: 1.1rem;
+        border-bottom-left-radius: 1.1rem;
+        background: #fff0f3;
+        object-fit: cover;
+        width: 260px;
+        height: 100%;
+        min-height: 180px;
+        max-height: 220px;
+    }
+    .product-card-body {
+        flex: 1;
+        padding: 1.2rem 1.5rem 1rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .card-title {
+        color: #dc143c;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.7rem;
+        letter-spacing: 0.2px;
+    }
+    .card-text strong {
+        color: #b11236;
+        font-weight: 600;
+    }
+    .badge.bg-success, .badge.bg-secondary {
+        font-size: 1rem;
+        padding: 0.4em 0.8em;
+        border-radius: 0.7em;
+    }
+    .badge.bg-success {
+        background: #dc143c !important;
+        color: #fff !important;
+    }
+    .badge.bg-secondary {
+        background: #f3f4f6 !important;
+        color: #dc143c !important;
+        border: 1px solid #dc143c33;
+    }
+    .btn, .btn-primary, .btn-success, .btn-info, .btn-warning, .btn-outline-success, .btn-outline-danger, .btn-secondary {
+        border-radius: 2rem !important;
+        font-weight: 600;
+        font-size: 1.07rem;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 12px 0 rgba(220,20,60,0.10);
+        transition: none;
+    }
+    .btn-primary, .btn-success, .btn-info {
+        background: linear-gradient(90deg, #dc143c 0%, #b11236 100%);
+        color: #fff;
+        border: none;
+    }
+    .btn-primary:hover, .btn-success:hover, .btn-info:hover {
+        filter: brightness(1.08);
+    }
+    .btn-outline-success, .btn-outline-danger {
+        background: transparent;
+        color: #dc143c;
+        border: 1.5px solid #dc143c;
+    }
+    .btn-outline-success:hover, .btn-outline-danger:hover {
+        background: #dc143c;
+        color: #fff;
+    }
+    .btn-warning {
+        background: #fff0f3;
+        color: #dc143c;
+        border: 1.5px solid #dc143c33;
+    }
+    .btn-secondary {
+        background: #f3f4f6;
+        color: #dc143c;
+        border: 1.5px solid #dc143c33;
+    }
+    .alert-success, .alert-danger {
+        border-radius: 0.7rem;
+        font-size: 1.05rem;
+        margin-bottom: 1.2rem;
+        padding: 0.9rem 1.2rem;
+        border: none;
+        box-shadow: 0 2px 8px 0 rgba(220,20,60,0.10);
+    }
+    .alert-success {
+        background: rgba(220,20,60,0.07);
+        color: #22c55e;
+    }
+    .alert-danger {
+        background: rgba(220,38,38,0.13);
+        color: #dc143c;
+    }
+    .form-control {
+        background: #fff;
+        border: 1.5px solid #dc143c33;
+        border-radius: 0.5rem;
+        color: #222;
+        font-size: 1.05rem;
+        transition: all 0.3s;
+    }
+    .form-control:focus {
+        outline: none;
+        border-color: #dc143c;
+        box-shadow: 0 0 0 3px rgba(220,20,60,0.13);
+    }
+    @media (max-width: 1100px) {
+        .products-main-container {
+            max-width: 98vw;
+            padding: 10px 0 15px 0;
+        }
+        .product-row-card {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .product-img {
+            width: 100%;
+            height: 180px;
+            border-radius: 1.1rem 1.1rem 0 0;
+        }
+        .product-card-body {
+            padding: 1.2rem 1rem 1rem 1rem;
+        }
+        .top-actions {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }
+</style>
 
-@if(session('success'))
-  <div class="alert alert-success">{{ session('success') }}</div>
-@endif
-@if(session('error'))
-  <div class="alert alert-danger">{{ session('error') }}</div>
-@endif
+<div class="products-main-container">
+    <h1>Products</h1>
 
-<div class="row mt-2 mb-3">
-  <div class="col-8"><h1>Products</h1></div>
-  @auth
-    <div class="col-2">
-      <a href="{{ route('my_purchases') }}" class="btn btn-info w-100">My Purchases</a>
+    <div class="top-actions">
+        @can('add_products')
+            <a href="{{ route('products_create') }}" class="btn btn-success">Add Product</a>
+        @endcan
+        @auth
+            <a href="{{ route('my_purchases') }}" class="btn btn-info">My Purchases</a>
+        @endauth
     </div>
-  @endauth
-  <div class="col-2">
-    @can('add_products')
-      <a href="{{ route('products_create') }}" class="btn btn-success w-100">Add Product</a>
-    @endcan
-  </div>
-</div>
 
-<form class="mb-3">
-  <div class="row gx-2">
-    <div class="col-sm-3">
-      <input name="keywords" type="text" class="form-control" placeholder="Search…" value="{{ request('keywords') }}" />
-    </div>
-    <div class="col-sm-2">
-      <input name="min_price" type="number" class="form-control" placeholder="Min $" value="{{ request('min_price') }}"/>
-    </div>
-    <div class="col-sm-2">
-      <input name="max_price" type="number" class="form-control" placeholder="Max $" value="{{ request('max_price') }}"/>
-    </div>
-    <div class="col-sm-2">
-      <button type="submit" class="btn btn-primary w-100">Filter</button>
-    </div>
-  </div>
-</form>
+    <form class="mb-3">
+      <div class="row gx-2">
+        <div class="col-12 mb-2">
+          <input name="keywords" type="text" class="form-control" placeholder="Search…" value="{{ request('keywords') }}" />
+        </div>
+        <div class="col-6 mb-2">
+          <input name="min_price" type="number" class="form-control" placeholder="Min $" value="{{ request('min_price') }}"/>
+        </div>
+        <div class="col-6 mb-2">
+          <input name="max_price" type="number" class="form-control" placeholder="Max $" value="{{ request('max_price') }}"/>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+      </div>
+    </form>
 
-
-<div class="row g-3">
-  @foreach($products as $product)
-    <div class="col-md-4">
-      <div class="card h-100">
+    @foreach($products as $product)
+      <div class="product-row-card">
         <img src="{{ asset("images/{$product->photo}") }}"
-             class="card-img-top"
-             alt="{{ $product->name }}"
-             style="object-fit: cover; height: 180px;">
-        <div class="card-body d-flex flex-column">
+             class="product-img"
+             alt="{{ $product->name }}">
+        <div class="product-card-body">
           <h5 class="card-title">{{ $product->name }}</h5>
           <p class="card-text mb-1">
             <strong>Price:</strong> ${{ number_format($product->price, 2) }}
@@ -98,8 +260,6 @@
 
         </div>
       </div>
-    </div>
-  @endforeach
+    @endforeach
 </div>
-
 @endsection

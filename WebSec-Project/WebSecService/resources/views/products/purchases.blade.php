@@ -5,44 +5,47 @@
     body {
         min-height: 100vh;
         background:
-            linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
-            url('https://ik.imagekit.io/jyx7871cz/gradient_2.jpg?updatedAt=1747489283026') no-repeat center center fixed;
+            linear-gradient(rgba(220,20,60,0.07), rgba(220,20,60,0.07)),
+            url('https://ik.imagekit.io/jyx7871cz/2148633547.jpg') no-repeat center center fixed;
         background-size: cover;
-        color: #fff;
+        color: #222;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
     .purchases-container {
-        max-width: 600px;
+        max-width: 700px;
         margin: 0 auto;
         padding: 32px 0 40px 0;
     }
     .modern-card {
-        background: rgba(24, 24, 24, 0.97);
-        border: none;
+        background: #fff;
+        border: 1.5px solid #dc143c33;
         border-radius: 1.1rem;
-        box-shadow: 0 6px 24px 0 rgba(0,0,0,0.38);
-        backdrop-filter: blur(5px);
+        box-shadow: 0 6px 24px 0 rgba(220,20,60,0.10);
         margin-bottom: 1.3rem;
-        transition: none;
+        color: #222;
+        transition: box-shadow 0.2s;
+    }
+    .modern-card:hover {
+        box-shadow: 0 10px 32px 0 rgba(220,20,60,0.18);
     }
     .modern-card .card-body {
-        padding: 1.3rem 1.3rem 1.1rem 1.3rem;
+        padding: 1.1rem 1.3rem 1.1rem 1.3rem;
     }
     .modern-card strong {
-        color: #a5b4fc;
+        color: #dc143c;
         font-weight: 600;
         font-size: 1.13rem;
         letter-spacing: 0.2px;
     }
     .modern-card p {
         margin-bottom: 0.6rem;
-        font-size: 1.18rem;
+        font-size: 1.13rem;
         line-height: 1.6;
-        color: #e5e7eb;
+        color: #222;
         letter-spacing: 0.1px;
     }
     .modern-card .btn {
-        background: linear-gradient(90deg, #0d6efd 0%, #6610f2 100%);
+        background: linear-gradient(90deg, #dc143c 0%, #b11236 100%);
         color: #fff;
         border: none;
         border-radius: 2rem;
@@ -51,7 +54,7 @@
         padding: 0.7rem 1.3rem;
         letter-spacing: 1px;
         margin-top: 0.7rem;
-        box-shadow: 0 2px 12px 0 rgba(13,110,253,0.12);
+        box-shadow: 0 2px 12px 0 rgba(220,20,60,0.10);
         transition: none;
     }
     .modern-card .btn:active {
@@ -59,19 +62,20 @@
     }
     .modern-card .btn-outline-primary {
         background: transparent;
-        color: #a5b4fc;
-        border: 1.5px solid #6366f1;
+        color: #dc143c;
+        border: 1.5px solid #dc143c;
         border-radius: 2rem;
         font-weight: 600;
         transition: none;
     }
-    .modern-card .btn-outline-primary:active {
-        background: #23234a;
+    .modern-card .btn-outline-primary:active,
+    .modern-card .btn-outline-primary:hover {
+        background: #dc143c;
         color: #fff;
     }
     .modern-card .leaflet-container {
         border-radius: 0.7rem;
-        box-shadow: 0 2px 12px 0 rgba(13,110,253,0.10);
+        box-shadow: 0 2px 12px 0 rgba(220,20,60,0.10);
         margin-bottom: 0.5rem;
     }
     h1 {
@@ -80,8 +84,8 @@
         font-size: 2.3rem;
         font-weight: 700;
         letter-spacing: 1.5px;
-        color: #fff;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+        color: #dc143c;
+        text-shadow: 0 2px 8px rgba(220,20,60,0.08);
     }
     @media (max-width: 800px) {
         .purchases-container {
