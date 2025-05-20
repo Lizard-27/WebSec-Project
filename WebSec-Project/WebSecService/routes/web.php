@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\ProductsController;
 use App\Http\Controllers\Web\UsersController;
 use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\DeliveryController;
+use App\Http\Controllers\Web\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,9 +49,7 @@ Route::post('/users/{user}/add-role', [UsersController::class, 'saveRole'])->nam
 | Product Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/', function() {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // 1️⃣ Product catalog
 Route::get('products', [ProductsController::class, 'list'])
