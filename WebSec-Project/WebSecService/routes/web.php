@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\ProductsController;
 use App\Http\Controllers\Web\UsersController;
 use App\Http\Controllers\Web\CartController;
+use App\Http\Controllers\Web\DeliveryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,17 +129,18 @@ Route::get('/callback', function (Request $request) {
 });
 
 
+Route::middleware('auth')
+     ->prefix('delivery')
+     ->name('delivery.')
+     ->group(function () {
+         Route::get('/',                  [DeliveryController::class, 'index'])   ->name('index');
+         Route::post('{order}/accept',    [DeliveryController::class, 'accept'])  ->name('accept');
+         Route::get('{order}',            [DeliveryController::class, 'show'])    ->name('show');
+         Route::post('{order}/confirm',   [DeliveryController::class, 'confirm']) ->name('confirm');
+     });
 
-/*
-|--------------------------------------------------------------------------
-| Misc Pages
-|--------------------------------------------------------------------------
-*/
-Route::get('/multable', function(Request $request) {
-    $j = $request->number ?? 5;
-    $msg = $request->msg;
-    return view('multable', compact('j','msg'));
-});
-Route::get('/even', function() { return view('even'); });
-Route::get('/prime', function() { return view('prime'); });
-Route::get('/test', function()  { return view('test'); });
+
+
+
+
+

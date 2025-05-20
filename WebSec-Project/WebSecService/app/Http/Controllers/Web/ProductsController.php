@@ -6,6 +6,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Order;
+use App\Models\OrderItem;
 
 class ProductsController extends Controller
 {
@@ -13,7 +15,7 @@ class ProductsController extends Controller
 
     public function __construct()
     {
-        // Require authentication for everything except viewing the product list
+        // Guests can browse; everything else requires login
         $this->middleware('auth:web')->except('list');
     }
 
@@ -56,10 +58,11 @@ class ProductsController extends Controller
 
     /**
      * Handle the purchase submission:
-     * - Validate location & payment_method
-     * - Check credit & stock
-     * - Deduct stock & credit
-     * - Attach purchase to pivot with extra data
+     *   1) Validate location & payment_method
+     *   2) Check stock
+     *   3) Create one Order
+     *   4) Create each OrderItem
+     *   5) Deduct stock, clear cart (if you still use cart)
      */
     public function purchase(Request $request, $id)
     {
@@ -67,44 +70,51 @@ class ProductsController extends Controller
         $user    = auth()->user();
 
         $data = $request->validate([
-            'location'       => ['required', 'string', 'max:255'],
-            'payment_method' => ['required', 'in:card,cash,bank_transfer'],
+            'location'       => ['required','string','max:255'],
+            'payment_method' => ['required','in:card,cash,bank_transfer'],
         ]);
-
-        if ($user->credit < $product->price) {
-            return back()->with('error', 'Not enough credit.');
-        }
 
         if ($product->quantity <= 0) {
             return back()->with('error', 'This product is out of stock.');
         }
 
-        // Deduct one unit from stock
-        $product->decrement('quantity');
-
-        // Deduct cost from user credit
-        $user->decrement('credit', $product->price);
-
-        // Record the purchase in the pivot table, including location & payment
-        $user->purchases()->attach($product->id, [
+        // 1️⃣ Create the Order master record
+        $order = Order::create([
+            'user_id'        => $user->id,
             'location'       => $data['location'],
             'payment_method' => $data['payment_method'],
-            'created_at'     => now(),
-            'updated_at'     => now(),
+            'total'          => $product->price,   // single‑item total
         ]);
+
+        // 2️⃣ Record line item
+        OrderItem::create([
+            'order_id'   => $order->id,
+            'product_id' => $product->id,
+            'quantity'   => 1,
+            'price'      => $product->price,
+        ]);
+
+        // 3️⃣ Deduct stock
+        $product->decrement('quantity');
 
         return redirect()
             ->route('my_purchases')
-            ->with('success', 'Purchase complete!');
+            ->with('success', "Purchase complete! Order #{$order->id} created.");
     }
 
     /**
-     * Show the logged-in user’s purchase history.
+     * Show the logged-in user’s order history.
      */
     public function myProducts()
     {
-        $products = auth()->user()->purchases()->get();
-        return view('products.purchases', compact('products'));
+        // Eager‑load items→product for display
+        $orders = auth()->user()
+                       ->orders()
+                       ->with('items.product')
+                       ->orderByDesc('created_at')
+                       ->get();
+
+        return view('products.purchases', compact('orders'));
     }
 
     /**
@@ -126,12 +136,12 @@ class ProductsController extends Controller
     public function save(Request $request, Product $product = null)
     {
         $this->validate($request, [
-            'code'        => ['required', 'string', 'max:32'],
-            'name'        => ['required', 'string', 'max:128'],
-            'model'       => ['required', 'string', 'max:256'],
-            'description' => ['required', 'string', 'max:1024'],
-            'quantity'    => ['required', 'numeric', 'min:0'],
-            'price'       => ['required', 'numeric', 'min:0'],
+            'code'        => ['required','string','max:32'],
+            'name'        => ['required','string','max:128'],
+            'model'       => ['required','string','max:256'],
+            'description' => ['required','string','max:1024'],
+            'quantity'    => ['required','numeric','min:0'],
+            'price'       => ['required','numeric','min:0'],
         ]);
 
         $product = $product ?? new Product();

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Web;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Order;       // ← import your Order model
+use App\Models\OrderItem;   // ← if you also reference OrderItem
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -16,11 +19,21 @@ class CartController extends Controller
     }
 
     // Show the cart
-    public function index()
-    {
-        $cart = auth()->user()->cart?->load('items.product');
-        return view('cart.index', compact('cart'));
-    }
+// app/Http/Controllers/Web/CartController.php
+
+public function index()
+{
+    // Force the Cart to come back with its items and each item's product
+    $cart = auth()
+        ->user()
+        ->cart()
+        ->with('items.product')    // eager-load the product on each CartItem
+        ->first();                 // get the Cart model instance
+
+    // Now $cart->items will be a Collection of CartItem with product loaded
+    return view('cart.index', compact('cart'));
+}
+
 
     // Add a product to cart
     public function add(Request $request, Product $product)
@@ -62,51 +75,58 @@ class CartController extends Controller
             return back()->with('error','Your cart is empty.');
         }
 
-        // Validate delivery info
+        // 1️⃣ Validate
         $data = $request->validate([
-            'location'       => ['required','string','max:255'],
-            'payment_method' => ['required','in:card,cash,bank_transfer'],
+            'location'       => 'required|string|max:255',
+            'lat'            => 'nullable|numeric',
+            'lng'            => 'nullable|numeric',
+            'payment_method' => 'required|in:card,cash,bank_transfer',
+            // card‑fields if you still want them…
         ]);
 
-        // Stock check
+        // 2️⃣ Total & stock check
+        $total = 0;
         foreach ($cart->items as $item) {
             if ($item->quantity > $item->product->quantity) {
                 return back()->with('error',
-                    "Insufficient stock for “{$item->product->name}”: you asked for {$item->quantity}, only {$item->product->quantity} left."
+                    "Only {$item->product->quantity} “{$item->product->name}” in stock, you asked for {$item->quantity}."
                 );
             }
+            $total += $item->product->price * $item->quantity;
         }
 
-        // Credit check
-        $total = $cart->items->sum(fn($i)=> $i->product->price * $i->quantity);
-        if ($user->credit < $total) {
-            return back()->with('error','Not enough credit to complete this purchase.');
-        }
+        // 3️⃣ Create master Order
+        $order = Order::create([
+            'user_id'           => $user->id,
+            'location'          => $data['location'],
+            'lat'               => $data['lat'] ?? null,
+            'lng'               => $data['lng'] ?? null,
+            'payment_method'    => $data['payment_method'],
+            'total'             => $total,
+            'accepted'          => false,
+            'delivery_confirmed'=> false,
+        ]);
 
-        // Process each item
-        foreach ($cart->items as $item) {
-            $product = $item->product;
-
-            $product->decrement('quantity', $item->quantity);
-            $user->decrement('credit', $product->price * $item->quantity);
-
-            // Attach with pivot data
-            $user->purchases()->attach($product->id, [
-                'quantity'       => $item->quantity,
-                'location'       => $data['location'],
-                'payment_method' => $data['payment_method'],
-                'created_at'     => now(),
-                'updated_at'     => now(),
-            ]);
-        }
-
-        // Clear cart
-        $cart->items()->delete();
+        // 4️⃣ Create line‐items & deduct stock
+        DB::transaction(function() use ($order, $cart, $user) {
+            foreach ($cart->items as $item) {
+                $p = $item->product;
+                OrderItem::create([
+                    'order_id'   => $order->id,
+                    'product_id' => $p->id,
+                    'quantity'   => $item->quantity,
+                    'price'      => $p->price,
+                ]);
+                $p->decrement('quantity', $item->quantity);
+            }
+            // 5️⃣ Empty cart
+            $cart->items()->delete();
+        });
 
         return redirect()
             ->route('my_purchases')
-            ->with('success','Checkout successful!');
+            ->with('success',"Checkout complete—Order #{$order->id} created.");
     }
-
-
 }
+
+
