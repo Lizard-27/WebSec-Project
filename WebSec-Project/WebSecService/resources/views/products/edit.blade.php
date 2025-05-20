@@ -1,6 +1,7 @@
 @extends('layouts.master')
 @section('title', 'Edit Product')
 @section('content')
+@php use Illuminate\Support\Str; @endphp
 <style>
     body, html {
         margin: 0;
@@ -159,3 +160,4 @@
     </div>
 </div>
 @endsection
+

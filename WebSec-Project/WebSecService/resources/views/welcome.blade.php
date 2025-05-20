@@ -10,6 +10,8 @@
     background-color: #fff;
     color: #333;
     line-height: 1.6;
+    margin: 0;
+    padding: 0;
   }
 
   .container, .container-fluid {
@@ -42,10 +44,11 @@
     position: relative;
     margin-bottom: 3rem;
     width: 100vw;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
+    left: 0;
+    margin-left: 0;
+    margin-right: 0;
+    top: 0;
+    box-sizing: border-box;
   }
 
   .hero-content {
@@ -126,11 +129,15 @@
   }
 
   .card-img-top, .card-img {
-    height: 200px;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-    width: 100%;
-  }
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+  background: #fff0f3;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
 
   .card:hover .card-img-top, .card:hover .card-img {
     transform: scale(1.05);
@@ -194,6 +201,8 @@
     background-color: #dc143c !important;
   }
 
+
+
   @media (max-width: 1200px) {
     .container, .container-fluid {
       max-width: 100vw !important;
@@ -232,7 +241,7 @@
   <div class="hero-content">
     <h1>Authentic Japanese Cuisine Delivered</h1>
     <p>Experience the art of Japanese cooking with our premium selection of sushi, ramen, and traditional dishes - delivered straight to your door.</p>
-    <a href="#" class="btn btn-primary">Order Now</a>
+    <a href="{{ route('products_list') }}" class="btn btn-primary">Order Now</a>
   </div>
 </section>
 
@@ -246,7 +255,10 @@
     @foreach($products as $product)
       <div class="col-md-4 mb-4">
         <div class="card position-relative">
-          <img src="{{ asset("images/{$product->photo}") }}" class="card-img-top" alt="{{ $product->name }}">
+          <img 
+            src="{{ Str::startsWith($product->photo, ['http://', 'https://']) ? $product->photo : asset('images/' . $product->photo) }}" 
+            class="card-img-top" 
+            alt="{{ $product->name }}">
           <div class="card-body">
             <h5 class="card-title">{{ $product->name }}</h5>
             <p class="card-text">{{ $product->description }}</p>

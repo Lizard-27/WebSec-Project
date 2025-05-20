@@ -1,29 +1,49 @@
 @extends('layouts.master')
-@section('title', 'Products')
+@section('title', 'Dishes')
 @section('content')
 <style>
     body {
         min-height: 100vh;
         background:
-            linear-gradient(rgba(220,20,60,0.07), rgba(220,20,60,0.07)),
+            linear-gradient(rgba(34,193,195,0.10), rgba(253,187,45,0.10)),
             url('https://ik.imagekit.io/jyx7871cz/2149013658.jpg') no-repeat center center fixed;
         background-size: cover;
-        color: #222;
+        color: #1a2233;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
-    .products-main-container {
+    .dishes-main-container {
         max-width: 1100px;
         margin: 0 auto;
         padding: 20px 0 30px 0;
     }
-    h1 {
-        font-size: 2.4rem;
-        font-weight: 700;
-        letter-spacing: 1.5px;
-        color: #dc143c;
-        text-shadow: 0 2px 8px rgba(220,20,60,0.08);
+    .logo-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         margin-bottom: 1.5rem;
+    }
+    .logo-header img {
+        width: 180px;
+        height: 180px;
+        object-fit: contain;
+        margin-bottom: 1rem;
+        filter: drop-shadow(0 6px 24px rgba(34,193,195,0.15));
+    }
+    .logo-header h1 {
+        font-size: 2.7rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        color: #22c1c3;
+        text-shadow: 0 2px 12px rgba(34,193,195,0.12);
+        margin-bottom: 0.2rem;
         text-align: center;
+    }
+    .logo-header p {
+        font-size: 1.2rem;
+        color: #fdba2d;
+        font-weight: 600;
+        margin-bottom: 0;
+        letter-spacing: 1px;
     }
     .top-actions {
         display: flex;
@@ -31,12 +51,12 @@
         gap: 1rem;
         margin-bottom: 1.5rem;
     }
-    .product-row-card {
+    .dish-row-card {
         background: #fff;
-        border: 1.5px solid #dc143c33;
+        border: 1.5px solid #22c1c344;
         border-radius: 1.1rem;
-        box-shadow: 0 6px 24px 0 rgba(220,20,60,0.10);
-        color: #222;
+        box-shadow: 0 6px 24px 0 rgba(34,193,195,0.10);
+        color: #1a2233;
         margin-bottom: 1.2rem;
         display: flex;
         align-items: stretch;
@@ -44,20 +64,24 @@
         width: 100%;
         min-height: 180px;
     }
-    .product-row-card:hover {
-        box-shadow: 0 10px 32px 0 rgba(220,20,60,0.18);
+    .dish-row-card:hover {
+        box-shadow: 0 10px 32px 0 rgba(34,193,195,0.18);
     }
-    .product-img {
+    .dish-img {
         border-top-left-radius: 1.1rem;
         border-bottom-left-radius: 1.1rem;
-        background: #fff0f3;
+        background: #e0fcff;
         object-fit: cover;
-        width: 260px;
-        height: 100%;
-        min-height: 180px;
-        max-height: 220px;
+        width: 140px;
+        height: 140px;
+        min-width: 140px;
+        min-height: 140px;
+        max-width: 140px;
+        max-height: 140px;
+        margin: 20px 0 20px 20px;
+        box-shadow: 0 2px 8px 0 rgba(34,193,195,0.07);
     }
-    .product-card-body {
+    .dish-card-body {
         flex: 1;
         padding: 1.2rem 1.5rem 1rem 1.5rem;
         display: flex;
@@ -65,14 +89,14 @@
         justify-content: center;
     }
     .card-title {
-        color: #dc143c;
+        color: #22c1c3;
         font-size: 1.5rem;
         font-weight: 700;
         margin-bottom: 0.7rem;
         letter-spacing: 0.2px;
     }
     .card-text strong {
-        color: #b11236;
+        color: #fdba2d;
         font-weight: 600;
     }
     .badge.bg-success, .badge.bg-secondary {
@@ -81,24 +105,24 @@
         border-radius: 0.7em;
     }
     .badge.bg-success {
-        background: #dc143c !important;
+        background: #22c1c3 !important;
         color: #fff !important;
     }
     .badge.bg-secondary {
         background: #f3f4f6 !important;
-        color: #dc143c !important;
-        border: 1px solid #dc143c33;
+        color: #22c1c3 !important;
+        border: 1px solid #22c1c344;
     }
     .btn, .btn-primary, .btn-success, .btn-info, .btn-warning, .btn-outline-success, .btn-outline-danger, .btn-secondary {
         border-radius: 2rem !important;
         font-weight: 600;
         font-size: 1.07rem;
         letter-spacing: 0.5px;
-        box-shadow: 0 2px 12px 0 rgba(220,20,60,0.10);
+        box-shadow: 0 2px 12px 0 rgba(34,193,195,0.10);
         transition: none;
     }
     .btn-primary, .btn-success, .btn-info {
-        background: linear-gradient(90deg, #dc143c 0%, #b11236 100%);
+        background: linear-gradient(90deg, #22c1c3 0%, #fdba2d 100%);
         color: #fff;
         border: none;
     }
@@ -107,22 +131,22 @@
     }
     .btn-outline-success, .btn-outline-danger {
         background: transparent;
-        color: #dc143c;
-        border: 1.5px solid #dc143c;
+        color: #22c1c3;
+        border: 1.5px solid #22c1c3;
     }
     .btn-outline-success:hover, .btn-outline-danger:hover {
-        background: #dc143c;
+        background: #22c1c3;
         color: #fff;
     }
     .btn-warning {
-        background: #fff0f3;
-        color: #dc143c;
-        border: 1.5px solid #dc143c33;
+        background: #e0fcff;
+        color: #22c1c3;
+        border: 1.5px solid #22c1c344;
     }
     .btn-secondary {
         background: #f3f4f6;
-        color: #dc143c;
-        border: 1.5px solid #dc143c33;
+        color: #22c1c3;
+        border: 1.5px solid #22c1c344;
     }
     .alert-success, .alert-danger {
         border-radius: 0.7rem;
@@ -130,44 +154,45 @@
         margin-bottom: 1.2rem;
         padding: 0.9rem 1.2rem;
         border: none;
-        box-shadow: 0 2px 8px 0 rgba(220,20,60,0.10);
+        box-shadow: 0 2px 8px 0 rgba(34,193,195,0.10);
     }
     .alert-success {
-        background: rgba(220,20,60,0.07);
+        background: rgba(34,193,195,0.07);
         color: #22c55e;
     }
     .alert-danger {
-        background: rgba(220,38,38,0.13);
-        color: #dc143c;
+        background: rgba(253,187,45,0.13);
+        color: #fdba2d;
     }
     .form-control {
         background: #fff;
-        border: 1.5px solid #dc143c33;
+        border: 1.5px solid #22c1c344;
         border-radius: 0.5rem;
-        color: #222;
+        color: #1a2233;
         font-size: 1.05rem;
         transition: all 0.3s;
     }
     .form-control:focus {
         outline: none;
-        border-color: #dc143c;
-        box-shadow: 0 0 0 3px rgba(220,20,60,0.13);
+        border-color: #22c1c3;
+        box-shadow: 0 0 0 3px rgba(34,193,195,0.13);
     }
     @media (max-width: 1100px) {
-        .products-main-container {
+        .dishes-main-container {
             max-width: 98vw;
             padding: 10px 0 15px 0;
         }
-        .product-row-card {
+        .dish-row-card {
             flex-direction: column;
             align-items: stretch;
         }
-        .product-img {
+        .dish-img {
             width: 100%;
             height: 180px;
             border-radius: 1.1rem 1.1rem 0 0;
+            margin: 0;
         }
-        .product-card-body {
+        .dish-card-body {
             padding: 1.2rem 1rem 1rem 1rem;
         }
         .top-actions {
@@ -177,22 +202,26 @@
     }
 </style>
 
-<div class="products-main-container">
-    <h1>Products</h1>
+<div class="dishes-main-container">
+    <div class="logo-header">
+                  <img src="https://cdn-icons-png.flaticon.com/512/2718/2718224.png" alt="Ramen Icon" width="64" height="64">
+        <h1>Delicious Dishes</h1>
+        <p>Discover &amp; order your favorite meals</p>
+    </div>
 
     <div class="top-actions">
         @can('add_products')
-            <a href="{{ route('products_create') }}" class="btn btn-success">Add Product</a>
+            <a href="{{ route('products_create') }}" class="btn btn-success">Add Dish</a>
         @endcan
         @auth
-            <a href="{{ route('my_purchases') }}" class="btn btn-info">My Purchases</a>
+            <a href="{{ route('my_purchases') }}" class="btn btn-info">My Orders</a>
         @endauth
     </div>
 
     <form class="mb-3">
       <div class="row gx-2">
         <div class="col-12 mb-2">
-          <input name="keywords" type="text" class="form-control" placeholder="Search…" value="{{ request('keywords') }}" />
+          <input name="keywords" type="text" class="form-control" placeholder="Search dishes…" value="{{ request('keywords') }}" />
         </div>
         <div class="col-6 mb-2">
           <input name="min_price" type="number" class="form-control" placeholder="Min $" value="{{ request('min_price') }}"/>
@@ -207,11 +236,12 @@
     </form>
 
     @foreach($products as $product)
-      <div class="product-row-card">
-        <img src="{{ asset("images/{$product->photo}") }}"
-             class="product-img"
-             alt="{{ $product->name }}">
-        <div class="product-card-body">
+      <div class="dish-row-card">
+        <img 
+          src="{{ Str::startsWith($product->photo, ['http://', 'https://']) ? $product->photo : asset('images/' . $product->photo) }}" 
+          class="dish-img" 
+          alt="{{ $product->name }}">
+        <div class="dish-card-body">
           <h5 class="card-title">{{ $product->name }}</h5>
           <p class="card-text mb-1">
             <strong>Price:</strong> ${{ number_format($product->price, 2) }}
@@ -229,14 +259,14 @@
           @auth
             @if($product->quantity > 0)
               <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary mt-2">
-                Buy
+                Order Now
               </a>
             @else
               <button class="btn btn-secondary mt-2" disabled>Out of Stock</button>
             @endif
           @else
             <a href="{{ route('login') }}" class="btn btn-warning mt-2">
-              Login to Buy
+              Login to Order
             </a>
           @endauth
 
@@ -250,7 +280,7 @@
                 <form action="{{ route('products_delete', $product->id) }}" method="POST" class="w-100">
                   @csrf
                   @method('DELETE')
-                  <button class="btn btn-outline-danger btn-sm w-100" onclick="return confirm('Delete this product?')">
+                  <button class="btn btn-outline-danger btn-sm w-100" onclick="return confirm('Delete this dish?')">
                     Delete
                   </button>
                 </form>
