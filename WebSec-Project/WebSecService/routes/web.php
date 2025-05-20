@@ -138,25 +138,3 @@ Route::middleware('auth')
          Route::get('{order}',            [DeliveryController::class, 'show'])    ->name('show');
          Route::post('{order}/confirm',   [DeliveryController::class, 'confirm']) ->name('confirm');
      });
-<<<<<<< HEAD
-
-
-
-
-
-
-=======
-/*
-|--------------------------------------------------------------------------
-| Misc Pages
-|--------------------------------------------------------------------------
-*/
-Route::get('/multable', function(Request $request) {
-    $j = $request->number ?? 5;
-    $msg = $request->msg;
-    return view('multable', compact('j','msg'));
-});
-Route::get('/even', function() { return view('even'); });
-Route::get('/prime', function() { return view('prime'); });
-Route::get('/test', function()  { return view('test'); });
->>>>>>> 3ff3db9cdb76f3196fae930e83bbe49226e24373
