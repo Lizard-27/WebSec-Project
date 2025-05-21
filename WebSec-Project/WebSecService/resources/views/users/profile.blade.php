@@ -7,19 +7,53 @@
     body, html {
         margin: 0;
         padding: 0;
-        height: 100%;
+        height: 100vh;
+        width: 100vw;
         font-family: 'Inter', sans-serif;
-        background-color: #0f0f0f;
+        background:
+            linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0)),
+            url('https://ik.imagekit.io/jyx7871cz/2149013723(1).jpg') no-repeat center center;
+        background-size: cover;
         color: #f4f4f5;
+        overflow: hidden;
     }
 
-    .profile-container {
-        max-width: 800px;
-        margin: 2rem auto;
+    .split-screen {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+
+    .left-half {
+        flex: 1;
+        background:
+            linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0)),
+            url('https://ik.imagekit.io/jyx7871cz/Restaurant,_Roppongi,_Tokyo,_Japan_1_(133461680).jpg') no-repeat center center;
+        background-size: cover;
+    }
+
+    .right-half {
+        width: 45%;
+        min-width: 500px;
+        background: #0f0f0f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         padding: 2rem;
+        overflow-y: auto;
+    }
+
+    .profile-card {
+        width: 100%;
+        max-width: 480px;
         background: #18181b;
-        border-radius: 0.5rem;
-        border: 1px solid #3f3f46;
+        border-radius: 0.7rem;
+        box-shadow: 0 6px 24px 0 rgba(34,193,195,0.10);
+        padding: 2.2rem 2rem;
+        margin: 0 auto;
     }
 
     .profile-header {
@@ -27,10 +61,23 @@
         margin-bottom: 2rem;
     }
 
+    .profile-header .fa-user-circle {
+        font-size: 3.5rem;
+        color: #22c1c3;
+        margin-bottom: 0.7rem;
+    }
+
     .profile-header h2 {
         color: #fff;
         font-size: 1.8rem;
         font-weight: 700;
+        margin-bottom: 0.2rem;
+    }
+
+    .profile-header p {
+        color: #a1a1aa;
+        font-size: 1.05rem;
+        margin-bottom: 0;
     }
 
     .profile-table {
@@ -38,6 +85,7 @@
         margin-bottom: 2rem;
         border-collapse: separate;
         border-spacing: 0;
+        background: transparent;
     }
 
     .profile-table th, 
@@ -51,10 +99,12 @@
         color: #a1a1aa;
         font-weight: 500;
         width: 30%;
+        background: transparent;
     }
 
     .profile-table td {
         color: #f4f4f5;
+        background: transparent;
     }
 
     .badge {
@@ -86,6 +136,7 @@
         gap: 1rem;
         flex-wrap: wrap;
         margin-top: 2rem;
+        justify-content: center;
     }
 
     .btn {
@@ -100,12 +151,12 @@
     }
 
     .btn-primary {
-        background: rgb(18, 56, 152);
+        background: #dc143c;
         color: white;
     }
 
     .btn-primary:hover {
-        background: rgb(28, 83, 222);
+        background: #b11236;
     }
 
     .btn-danger {
@@ -118,62 +169,83 @@
     }
 
     @media (max-width: 768px) {
-        .profile-container {
-            margin: 1rem;
-            padding: 1rem;
+        .split-screen {
+            flex-direction: column;
         }
-        
+
+        .left-half {
+            display: none;
+        }
+
+        .right-half {
+            width: 100%;
+            min-width: 100%;
+            height: 100vh;
+        }
+        .profile-card {
+            padding: 1.2rem 0.5rem;
+        }
         .action-buttons {
             flex-direction: column;
         }
-        
         .btn {
             width: 100%;
         }
     }
 </style>
 
-<div class="profile-container">
-    <div class="profile-header">
-        <h2>User Profile</h2>
-    </div>
+<div class="split-screen">
+    <div class="left-half"></div>
+    <div class="right-half">
+        <div class="profile-card">
+            <div class="profile-header">
+                <img 
+                    src="https://ik.imagekit.io/jyx7871cz/vector-image-asian-face-mustache-600nw-1155849241.jpg.webp" 
+                    alt="User Photo" 
+                    style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 0.7rem; border: 3px solid #22c1c3; background: #222;"
+                >
+                <h2>{{ $user->name }}</h2>
+                <p>User Profile</p>
+            </div>
 
-    <table class="profile-table">
-        <tr>
-            <th>Name</th>
-            <td>{{ $user->name }}</td>
-        </tr>
-        <tr>
-            <th>Email</th>
-            <td>{{ $user->email }}</td>
-        </tr>
-        <tr>
-            <th>Roles</th>
-            <td>
-                @foreach ($user->roles as $role)
-                    <span class="badge badge-primary">{{ $role->name }}</span>
-                @endforeach
-            </td>
-        </tr>
-        <tr>
-            <th>Permissions</th>
-            <td>
-                @foreach ($permissions as $permission)
-                    <span class="badge badge-success">{{ $permission->display_name }}</span>
-                @endforeach
-            </td>
-        </tr>
-    </table>
+            <table class="profile-table">
+                <tr>
+                    <th>Name</th>
+                    <td>{{ $user->name }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ $user->email }}</td>
+                </tr>
+                <tr>
+                    <th>Roles</th>
+                    <td>
+                        @foreach ($user->roles as $role)
+                            <span class="badge badge-primary">{{ $role->name }}</span>
+                        @endforeach
+                    </td>
+                </tr>
+                <tr>
+                    <th>Permissions</th>
+                    <td>
+                        @foreach ($permissions as $permission)
+                            <span class="badge badge-success">{{ $permission->display_name }}</span>
+                        @endforeach
+                    </td>
+                </tr>
+            </table>
 
-    <div class="action-buttons">
-        @if (auth()->user()->hasPermissionTo('admin_users') || auth()->id() == $user->id)
-            <a class="btn btn-primary" href='{{ route('edit_password', $user->id) }}'>Change Password</a>
-            <a class="btn btn-primary" href='{{ route('users_add_role', $user->id) }}'>Add Role</a>
-        @endif
-        
-        @if (auth()->user()->hasPermissionTo('edit_users') || auth()->id() == $user->id)
-            <a href="{{ route('users_edit', $user->id) }}" class="btn btn-danger">Edit Profile</a>
-        @endif
+            <div class="action-buttons">
+                @if (auth()->user()->hasPermissionTo('admin_users') || auth()->id() == $user->id)
+                    <a class="btn btn-primary" href='{{ route('edit_password', $user->id) }}'>Change Password</a>
+                    <a class="btn btn-primary" href='{{ route('users_add_role', $user->id) }}'>Add Role</a>
+                @endif
+                
+                @if (auth()->user()->hasPermissionTo('edit_users') || auth()->id() == $user->id)
+                    <a href="{{ route('users_edit', $user->id) }}" class="btn btn-danger">Edit Profile</a>
+                @endif
+            </div>
+        </div>
     </div>
 </div>
 @endsection

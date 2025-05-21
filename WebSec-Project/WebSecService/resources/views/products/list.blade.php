@@ -6,7 +6,7 @@
         min-height: 100vh;
         background:
             linear-gradient(rgba(34,193,195,0.10), rgba(253,187,45,0.10)),
-            url('https://ik.imagekit.io/jyx7871cz/2149013658.jpg') no-repeat center center fixed;
+            url('https://ik.imagekit.io/jyx7871cz/2149013723.jpg?updatedAt=1747749116225') no-repeat center center fixed;
         background-size: cover;
         color: #1a2233;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -105,13 +105,13 @@
         border-radius: 0.7em;
     }
     .badge.bg-success {
-        background: #22c1c3 !important;
+        background: #b11236 !important;
         color: #fff !important;
     }
     .badge.bg-secondary {
         background: #f3f4f6 !important;
-        color: #22c1c3 !important;
-        border: 1px solid #22c1c344;
+        color: #dc143c !important;
+        border: 1px solid #dc143c;
     }
     .btn, .btn-primary, .btn-success, .btn-info, .btn-warning, .btn-outline-success, .btn-outline-danger, .btn-secondary {
         border-radius: 2rem !important;
@@ -122,7 +122,7 @@
         transition: none;
     }
     .btn-primary, .btn-success, .btn-info {
-        background: linear-gradient(90deg, #22c1c3 0%, #fdba2d 100%);
+        background: linear-gradient(90deg, #b11236 0%,rgb(220, 118, 138) 100%);
         color: #fff;
         border: none;
     }
@@ -131,16 +131,16 @@
     }
     .btn-outline-success, .btn-outline-danger {
         background: transparent;
-        color: #22c1c3;
-        border: 1.5px solid #22c1c3;
+        color: #b11236;
+        border: 1.5px solid #b11236;
     }
     .btn-outline-success:hover, .btn-outline-danger:hover {
-        background: #22c1c3;
+        background: #b11236;
         color: #fff;
     }
     .btn-warning {
         background: #e0fcff;
-        color: #22c1c3;
+        color: #b11236;
         border: 1.5px solid #22c1c344;
     }
     .btn-secondary {
