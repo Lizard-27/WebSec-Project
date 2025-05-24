@@ -2,6 +2,31 @@
 @section('title', $product->name)
 
 @section('content')
+  <style>
+    /* ★ Rating stars CSS */
+    .stars {
+      direction: rtl;
+      display: inline-flex;
+    }
+    .stars input {
+      display: none;
+    }
+    .stars label {
+      font-size: 2rem;
+      color: #ddd;
+      cursor: pointer;
+    }
+    .stars input:checked ~ label,
+    .stars label:hover,
+    .stars label:hover ~ label {
+      color: #f5b301;
+    }
+    .average-stars {
+      font-size: 1.5rem;
+      color: #f5b301;
+    }
+  </style>
+
   <div class="mb-3">
     <a href="{{ route('products_list') }}" class="btn btn-secondary">
       ← Back to Products
@@ -28,6 +53,41 @@
         <div class="alert alert-success">{{ session('success') }}</div>
       @endif
 
+      {{-- ★ Rating Section --}}
+      <h3>Rate this dish</h3>
+
+      @auth
+        <form action="{{ route('products.rate', $product) }}" method="POST" class="rating-form">
+          @csrf
+          <div class="stars">
+            @for($i=5; $i>=1; $i--)
+              <input type="radio" id="star-{{ $i }}" name="rating" value="{{ $i }}"
+                     {{ old('rating', $userRating) == $i ? 'checked' : '' }} />
+              <label for="star-{{ $i }}" title="{{ $i }} stars">★</label>
+            @endfor
+          </div>
+          <button type="submit" class="btn btn-sm btn-primary mt-2">Submit Rating</button>
+        </form>
+      @else
+        <p><a href="{{ route('login') }}">Log in</a> to rate this dish.</p>
+      @endauth
+
+      <h4 class="mt-4">Average Rating:</h4>
+      <div class="average-stars">
+        @php
+          $full  = floor($avg);
+          $half  = $avg - $full >= 0.5;
+          $empty = 5 - $full - ($half ? 1 : 0);
+        @endphp
+
+        @for($i = 0; $i < $full;  $i++) ★ @endfor
+        @if($half) ☆ @endif
+        @for($i = 0; $i < $empty; $i++) ☆ @endfor
+
+        <span>({{ number_format($avg, 1) }} / 5)</span>
+      </div>
+      {{-- ★ End Rating Section --}}
+
       @auth
         @if($product->quantity > 0)
           <form action="{{ route('cart.add', $product->id) }}"
@@ -49,6 +109,7 @@
       @else
         <p class="mt-3"><a href="{{ route('login') }}">Log in</a> to add this item to your cart.</p>
       @endauth
+
     </div>
   </div>
 @endsection

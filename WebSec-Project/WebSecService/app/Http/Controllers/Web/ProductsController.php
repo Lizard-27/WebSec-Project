@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Rating;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -50,10 +51,32 @@ class ProductsController extends Controller
     /**
      * Display the product details & purchase form.
      */
-    public function show($id)
+    public function show(Product $product)
     {
-        $product = Product::findOrFail($id);
-        return view('products.show', compact('product'));
+        $avg = round($product->averageRating(), 1); // e.g. 4.2
+        $userRating = auth()->check()
+            ? $product->ratings()->where('user_id', auth()->id())->value('rating')
+            : null;
+
+        return view('products.show', compact('product', 'avg', 'userRating'));
+    }
+
+    // Store or update the authenticated user's rating for this product
+    public function rate(Request $request, Product $product)
+    {
+        $data = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+        ]);
+
+        Rating::updateOrCreate(
+            [
+                'user_id'    => auth()->id(),
+                'product_id' => $product->id,
+            ],
+            ['rating'     => $data['rating']]
+        );
+
+        return back()->with('success', 'Thank you for rating!');
     }
 
     /**
