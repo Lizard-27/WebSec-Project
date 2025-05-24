@@ -89,14 +89,23 @@ Route::post('/users/{user}/add-role',[UsersController::class, 'saveRole'])   ->n
 */
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
+
+
 // 1️⃣ Product catalog
 Route::get('products', [ProductsController::class, 'list'])
      ->name('products_list');
 
 // 2️⃣ Product details & purchase form
-Route::get('products/{id}', [ProductsController::class, 'show'])
-     ->name('products.show')
-     ->middleware('auth');
+// Show dish detail + rating form
+Route::get('products/{product}', [ProductsController::class, 'show'])
+     ->middleware('auth:web')
+     ->name('products.show');
+
+// ★ Submit a rating for a dish
+Route::post('products/{product}/rate', [ProductsController::class, 'rate'])
+     ->middleware('auth:web')
+     ->name('products.rate');
+
 
 // 3️⃣ Handle purchase submission
 Route::post('products/{id}/purchase', [ProductsController::class, 'purchase'])
