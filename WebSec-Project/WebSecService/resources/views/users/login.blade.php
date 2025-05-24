@@ -178,10 +178,9 @@
         </a>
         <div class="login-card">
             <div class="logo">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="#6366f1" viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.8L20 9v6l-8 4-8-4V9l8-4.2z"/></svg>
+                <img src="https://ik.imagekit.io/jyx7871cz/cropped_image.png?updatedAt=1748079312347" alt="Logo" style="width: 64px; height: 64px; border-radius: 50%; background: #232526; margin-bottom: 0.7rem; border: 2px solid #dc143c;">
                 <h2>Sign In</h2>
             </div>
-
             <form action="{{ route('do_login') }}" method="post">
                 {{ csrf_field() }}
 
