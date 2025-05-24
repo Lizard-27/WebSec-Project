@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Traits\HasPermissions;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail // ← Implement this
@@ -14,7 +15,8 @@ class User extends Authenticatable implements MustVerifyEmail // ← Implement t
     use HasApiTokens,
         HasFactory,
         Notifiable,
-        HasRoles;
+        HasRoles,
+        HasPermissions;
 
     protected $fillable = [
         'name',
@@ -43,7 +45,7 @@ class User extends Authenticatable implements MustVerifyEmail // ← Implement t
                     ->withPivot('quantity', 'location', 'payment_method')
                     ->withTimestamps();
     }
-    
+
     public function ratings()
     {
         return $this->hasMany(Rating::class);
