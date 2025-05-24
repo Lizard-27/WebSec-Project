@@ -155,7 +155,9 @@
 
       {{-- CENTER: Logo --}}
       <div class="center">
-        <img src="https://ik.imagekit.io/jyx7871cz/cropped_image.png" alt="WebSec Logo" draggable="false">
+        <a href="{{ route('welcome') }}">
+          <img src="https://ik.imagekit.io/jyx7871cz/cropped_image.png" alt="WebSec Logo" draggable="false">
+        </a>
       </div>
 
       {{-- RIGHT: geo‑pin for delivery → next order; eye for customers → their orders; cart; profile/logout --}}
