@@ -121,12 +121,13 @@
 <body>
 
   @php
-    // Hide navbar on login, register, and profile pages
+    // Hide navbar on login, register, profile, password reset, and password email pages
     $hideNavbar = false;
     $currentRoute = Route::currentRouteName();
     if (
       in_array($currentRoute, [
         'login', 'do_login', 'register', 'do_register', 'profile',
+        'password.request', 'password.email', 'password.reset', 'password.update'
         // Add more route names if needed
       ])
     ) {
