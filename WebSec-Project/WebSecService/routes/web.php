@@ -10,7 +10,6 @@ use App\Http\Controllers\Web\UsersController;
 use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\DeliveryController;
 use App\Http\Controllers\Web\HomeController;
-use App\Http\Controllers\Web\WelcomeController; // Add this at the top if not present
 
 /*
 |--------------------------------------------------------------------------
@@ -22,8 +21,7 @@ Route::post('register', [UsersController::class, 'doRegister'])->name('do_regist
 Route::get('login',    [UsersController::class, 'login'])   ->name('login');
 Route::post('login',   [UsersController::class, 'doLogin']) ->name('do_login');
 Route::get('logout',   [UsersController::class, 'doLogout'])->name('do_logout');
-Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
-// Route::get('/', [HomeController::class, 'index'])->name('home'); // Remove or comment out this line
+
 
 // Forgot password
 Route::get('password/forgot', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
@@ -87,16 +85,25 @@ Route::post('/users/{user}/add-role',[UsersController::class, 'saveRole'])   ->n
 | Product Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+
 
 // 1️⃣ Product catalog
 Route::get('products', [ProductsController::class, 'list'])
      ->name('products_list');
 
 // 2️⃣ Product details & purchase form
-Route::get('products/{id}', [ProductsController::class, 'show'])
-     ->name('products.show')
-     ->middleware('auth');
+// Show dish detail + rating form
+Route::get('products/{product}', [ProductsController::class, 'show'])
+     ->middleware('auth:web')
+     ->name('products.show');
+
+// ★ Submit a rating for a dish
+Route::post('products/{product}/rate', [ProductsController::class, 'rate'])
+     ->middleware('auth:web')
+     ->name('products.rate');
+
 
 // 3️⃣ Handle purchase submission
 Route::post('products/{id}/purchase', [ProductsController::class, 'purchase'])
