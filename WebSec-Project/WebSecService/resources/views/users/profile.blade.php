@@ -233,16 +233,56 @@
                         @endforeach
                     </td>
                 </tr>
+                <tr>
+                    <th>Verified?</th>
+                    <td>
+                        @if($user->hasVerifiedEmail())
+                            <span class="badge badge-success">Yes</span>
+                        @else
+                            <span class="badge badge-secondary">No</span>
+                        @endif
+                    </td>
+                </tr>
             </table>
 
             <div class="action-buttons">
+                {{-- 1) Send Verification Email button --}}
+                @unless($user->hasVerifiedEmail())
+                    <form method="POST" action="{{ route('verification.send') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">
+                            Send Verification Email
+                        </button>
+                    </form>
+                @endunless
+
+                {{-- 2) Feedback messages --}}
+                @if(session('status') === 'verification-link-sent')
+                    <div class="alert alert-success w-100 mt-2">
+                        A new verification link has been sent to your email address.
+                    </div>
+                @endif
+
+                @if(session('status') === 'verified')
+                    <div class="alert alert-success w-100 mt-2">
+                        Your email has been successfully verified!
+                    </div>
+                @endif
+
+                {{-- 3) Other action buttons --}}
                 @if (auth()->user()->hasPermissionTo('admin_users') || auth()->id() == $user->id)
-                    <a class="btn btn-primary" href='{{ route('edit_password', $user->id) }}'>Change Password</a>
-                    <a class="btn btn-primary" href='{{ route('users_add_role', $user->id) }}'>Add Role</a>
+                    <a class="btn btn-primary" href="{{ route('edit_password', $user->id) }}">
+                        Change Password
+                    </a>
+                    <a class="btn btn-primary" href="{{ route('users_add_role', $user->id) }}">
+                        Add Role
+                    </a>
                 @endif
                 
                 @if (auth()->user()->hasPermissionTo('edit_users') || auth()->id() == $user->id)
-                    <a href="{{ route('users_edit', $user->id) }}" class="btn btn-danger">Edit Profile</a>
+                    <a href="{{ route('users_edit', $user->id) }}" class="btn btn-danger">
+                        Edit Profile
+                    </a>
                 @endif
             </div>
         </div>
