@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Web\ProductsController;
 use App\Http\Controllers\Web\UsersController;
@@ -19,6 +21,16 @@ Route::post('register', [UsersController::class, 'doRegister'])->name('do_regist
 Route::get('login',    [UsersController::class, 'login'])   ->name('login');
 Route::post('login',   [UsersController::class, 'doLogin']) ->name('do_login');
 Route::get('logout',   [UsersController::class, 'doLogout'])->name('do_logout');
+
+
+// Forgot password
+Route::get('password/forgot', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+// Reset password
+Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+
 
 // Social logins
 Route::get('auth/google',      [UsersController::class, 'redirectToGoogle'])  ->name('auth.google');

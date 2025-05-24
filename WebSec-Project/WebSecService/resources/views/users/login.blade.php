@@ -196,6 +196,13 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Login</button>
+                <div class="text-center mt-2">
+                    @if (Route::has('password.request'))
+                        <a class="login-link" href="{{ route('password.request') }}">
+                            Forgot your password?
+                        </a>
+                    @endif
+                </div>
             </form>
 
             <div class="social-buttons">
