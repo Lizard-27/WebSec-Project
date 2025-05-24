@@ -17,31 +17,113 @@
 
   <style>
     body { margin: 0; background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
-    .header-wrapper { width: 80%; max-width: 1200px; margin: 0 auto; position: relative; }
+    /* Modern, thin, transparent navigation bar */
+    .header-wrapper {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
     .custom-header {
-      background: #000; height: 100px; border-bottom-left-radius: 200px;
-      border-bottom-right-radius: 200px; display: flex; justify-content: space-between;
-      align-items: center; padding: 0 2rem; box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      background: rgba(24, 24, 27, 0.72);
+      height: 56px;
+      border-radius: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1.5rem;
+      box-shadow: 0 2px 16px 0 rgba(34,193,195,0.10);
+      margin-top: 1.5rem;
+      backdrop-filter: blur(8px) saturate(120%);
+      border: 1px solid rgba(34,193,195,0.10);
+      transition: background 0.3s;
     }
     .custom-header .left, .custom-header .right {
-      display: flex; align-items: center; gap: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
     }
     .custom-header .center {
-      position: absolute; left: 50%; transform: translateX(-50%);
-      top: 28px; color: #fff; font-size: 1.5rem; font-weight: 600;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 50%;
+      display: flex;
+      align-items: center;
+      height: 56px;
+      padding: 0;
+      /* Remove text styles, only for logo now */
     }
-    .custom-header a { color: #fff; text-decoration: none; font-size: 1.1rem; }
-    .custom-header a:hover { color: #fe5900; }
-    .custom-header i { font-size: 1.4rem; }
+    .custom-header .center img {
+      height: 38px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 2px 8px rgba(34,193,195,0.10));
+      user-select: none;
+    }
+    .custom-header a {
+      color: #f4f4f5;
+      text-decoration: none;
+      font-size: 1.08rem;
+      font-weight: 500;
+      padding: 0.2rem 0.7rem;
+      border-radius: 1.2rem;
+      transition: background 0.18s, color 0.18s;
+      opacity: 0.92;
+    }
+    .custom-header a:hover {
+      background: rgba(34,193,195,0.13);
+      color: #fdba2d;
+    }
+    .custom-header i {
+      font-size: 1.32rem;
+      vertical-align: middle;
+    }
+    .custom-header .badge {
+      font-size: 0.85rem;
+      padding: 0.2em 0.5em;
+      border-radius: 1em;
+      background: #fdba2d !important;
+      color: #18181b !important;
+      box-shadow: 0 2px 8px 0 rgba(34,193,195,0.10);
+    }
+    @media (max-width: 900px) {
+      .custom-header {
+        flex-direction: column;
+        height: auto;
+        padding: 1.2rem 1rem;
+        gap: 0.7rem;
+      }
+      .custom-header .center {
+        position: static;
+        transform: none;
+        margin: 0.5rem 0;
+        justify-content: center;
+      }
+    }
     .container { margin-top: 3rem; }
   </style>
 </head>
 <body>
 
+  @php
+    // Hide navbar on login, register, and profile pages
+    $hideNavbar = false;
+    $currentRoute = Route::currentRouteName();
+    if (
+      in_array($currentRoute, [
+        'login', 'do_login', 'register', 'do_register', 'profile',
+        // Add more route names if needed
+      ])
+    ) {
+      $hideNavbar = true;
+    }
+  @endphp
+
+  @unless($hideNavbar)
   <header class="header-wrapper">
     <div class="custom-header">
-
       {{-- LEFT: Products link for everyone, Delivery Dashboard for delivery-role --}}
       <div class="left">
         @auth
@@ -57,8 +139,10 @@
         @endauth
       </div>
 
-      {{-- CENTER --}}
-      <div class="center">Welcome</div>
+      {{-- CENTER: Logo --}}
+      <div class="center">
+        <img src="https://ik.imagekit.io/jyx7871cz/websec-logo.png" alt="WebSec Logo" draggable="false">
+      </div>
 
       {{-- RIGHT: geo‑pin for delivery → next order; eye for customers → their orders; cart; profile/logout --}}
       <div class="right">
@@ -112,9 +196,9 @@
           <a href="{{ route('register') }}" title="Register"><i class="bi bi-person-plus"></i></a>
         @endauth
       </div>
-
     </div>
   </header>
+  @endunless
 
   <div class="container">
     <h1>@yield('header')</h1>
