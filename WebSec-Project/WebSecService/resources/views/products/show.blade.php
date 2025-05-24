@@ -205,7 +205,7 @@
 
   <div class="dishes-main-container">
     <div class="logo-header">
-        <img src="https://cdn-icons-png.flaticon.com/512/2718/2718224.png" alt="Ramen Icon">
+        <img src="https://ik.imagekit.io/jyx7871cz/cropped_image.png?updatedAt=1748079312347" alt="Ramen Icon">
         <h1>{{ $product->name }}</h1>
         <p>Discover &amp; order your favorite meals</p>
     </div>

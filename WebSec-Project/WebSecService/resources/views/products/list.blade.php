@@ -89,7 +89,7 @@
         justify-content: center;
     }
     .card-title {
-        color: #22c1c3;
+        color: #b11236;
         font-size: 1.5rem;
         font-weight: 700;
         margin-bottom: 0.7rem;
@@ -145,7 +145,7 @@
     }
     .btn-secondary {
         background: #f3f4f6;
-        color: #22c1c3;
+        color: #b11236;
         border: 1.5px solid #22c1c344;
     }
     .alert-success, .alert-danger {
@@ -174,7 +174,7 @@
     }
     .form-control:focus {
         outline: none;
-        border-color: #22c1c3;
+        border-color: #b11236;
         box-shadow: 0 0 0 3px rgba(34,193,195,0.13);
     }
     @media (max-width: 1100px) {
@@ -204,9 +204,9 @@
 
 <div class="dishes-main-container">
     <div class="logo-header">
-                  <img src="https://cdn-icons-png.flaticon.com/512/2718/2718224.png" alt="Ramen Icon" width="64" height="64">
-        <h1>Delicious Dishes</h1>
-        <p>Discover &amp; order your favorite meals</p>
+                  <img src="https://ik.imagekit.io/jyx7871cz/cropped_image.png" alt="Ramen Icon" width="64" height="64">
+        <h1>HIRORAMEN</h1>
+        <p>Don't try it once try it twice</p>
     </div>
 
     <div class="top-actions">
