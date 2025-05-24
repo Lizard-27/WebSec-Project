@@ -31,7 +31,7 @@
         flex: 1;
         background:
             linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0)),
-            url('https://ik.imagekit.io/jyx7871cz/2149013723(1).jpg') no-repeat center center;
+            url('https://ik.imagekit.io/jyx7871cz/Restaurant,_Roppongi,_Tokyo,_Japan_1_(133461680).jpg') no-repeat center center;
         background-size: cover;
     }
 
@@ -173,6 +173,12 @@ $(document).ready(function(){
 <div class="split-screen">
     <div class="left-half"></div>
     <div class="right-half">
+        <!-- Back button -->
+        <a href="{{ route('profile', $user->id) }}" 
+           style="position: absolute; top: 32px; left: 32px; z-index: 10; color: #dc143c; background: rgba(255,255,255,0.85); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 2px 8px rgba(220,20,60,0.08); font-size: 1.5rem;"
+           title="Back to Profile">
+            <i class="fas fa-arrow-left"></i>
+        </a>
         <div class="edit-card">
             <div class="edit-header">
                 <img src="https://ik.imagekit.io/jyx7871cz/vector-image-asian-face-mustache-600nw-1155849241.jpg.webp" alt="User Photo">

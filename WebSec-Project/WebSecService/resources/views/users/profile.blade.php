@@ -197,6 +197,12 @@
 <div class="split-screen">
     <div class="left-half"></div>
     <div class="right-half">
+        <!-- Back button -->
+        <a href="{{ route('welcome') }}" 
+           style="position: absolute; top: 32px; left: 32px; z-index: 10; color: #dc143c; background: rgba(255,255,255,0.85); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 2px 8px rgba(220,20,60,0.08); font-size: 1.5rem;"
+           title="Back to Home">
+            <i class="fas fa-arrow-left"></i>
+        </a>
         <div class="profile-card">
             <div class="profile-header">
                 <img 
