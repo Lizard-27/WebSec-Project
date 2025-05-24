@@ -20,7 +20,7 @@
     /* Modern, thin, transparent navigation bar */
     .header-wrapper {
       width: 90%;
-      max-width: 1200px;
+      max-width: 1500px;
       margin: 0 auto;
       position: relative;
       z-index: 10;
@@ -33,10 +33,10 @@
       align-items: center;
       justify-content: center; /* Center children horizontally */
       padding: 0 1.5rem;
-      box-shadow: 0 2px 16px 0 rgba(34,193,195,0.10);
+      box-shadow: 0 2px 16px 0 #b11236;
       margin-top: 1.5rem;
       backdrop-filter: blur(8px) saturate(120%);
-      border: 1px solid rgba(34,193,195,0.10);
+      border: 1px solid #b11236;
       transition: background 0.3s;
       position: relative;
     }
@@ -72,7 +72,7 @@
       width: auto;
       display: block;
       margin: 0 auto;
-      filter: drop-shadow(0 2px 8px rgba(34,193,195,0.10));
+      filter: drop-shadow(0 2px 8px #b11236);
       user-select: none;
     }
     .custom-header a {
@@ -87,7 +87,7 @@
     }
     .custom-header a:hover {
       background: rgba(34,193,195,0.13);
-      color: #fdba2d;
+      color: #dc143c;
     }
     .custom-header i {
       font-size: 1.32rem;
