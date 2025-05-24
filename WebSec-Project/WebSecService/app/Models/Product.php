@@ -19,4 +19,15 @@ class Product extends Model  {
         return $this->belongsToMany(User::class)
                     ->withTimestamps();
     }
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    // helper to get average
+    public function averageRating()
+    {
+        return $this->ratings()->avg('rating') ?? 0;
+    }
+
 }
