@@ -30,35 +30,48 @@
       height: 56px;
       border-radius: 1.5rem;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: center; /* Center children horizontally */
       padding: 0 1.5rem;
       box-shadow: 0 2px 16px 0 rgba(34,193,195,0.10);
       margin-top: 1.5rem;
       backdrop-filter: blur(8px) saturate(120%);
       border: 1px solid rgba(34,193,195,0.10);
       transition: background 0.3s;
+      position: relative;
     }
-    .custom-header .left, .custom-header .right {
+    .custom-header .left,
+    .custom-header .right {
       display: flex;
       align-items: center;
       gap: 1.1rem;
+      position: absolute;
+      top: 0;
+      height: 100%;
+    }
+    .custom-header .left {
+      left: 1.5rem;
+    }
+    .custom-header .right {
+      right: 1.5rem;
     }
     .custom-header .center {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      top: 50%;
       display: flex;
       align-items: center;
+      justify-content: center;
       height: 56px;
-      padding: 0;
-      /* Remove text styles, only for logo now */
+      position: relative;
+      left: 0;
+      top: 0;
+      transform: none;
+      margin: 0 auto;
+      z-index: 1;
     }
     .custom-header .center img {
       height: 38px;
       width: auto;
       display: block;
+      margin: 0 auto;
       filter: drop-shadow(0 2px 8px rgba(34,193,195,0.10));
       user-select: none;
     }
@@ -141,7 +154,7 @@
 
       {{-- CENTER: Logo --}}
       <div class="center">
-        <img src="https://ik.imagekit.io/jyx7871cz/websec-logo.png" alt="WebSec Logo" draggable="false">
+        <img src="https://ik.imagekit.io/jyx7871cz/cropped_image.png" alt="WebSec Logo" draggable="false">
       </div>
 
       {{-- RIGHT: geo‑pin for delivery → next order; eye for customers → their orders; cart; profile/logout --}}
