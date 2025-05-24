@@ -43,6 +43,12 @@ class User extends Authenticatable implements MustVerifyEmail // ← Implement t
                     ->withPivot('quantity', 'location', 'payment_method')
                     ->withTimestamps();
     }
+    
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
 
     public function cart()
     {
