@@ -242,6 +242,14 @@
           class="dish-img" 
           alt="{{ $product->name }}">
         <div class="dish-card-body">
+          <div class="average-stars mb-2">
+            @php $avg = round($product->averageRating(),1); @endphp
+            @for($i=1; $i<=5; $i++)
+              <span style="color: {{ $i <= $avg ? '#f5b301' : '#ddd' }};">★</span>
+            @endfor
+            <small>({{ $avg }})</small>
+          </div>
+
           <h5 class="card-title">{{ $product->name }}</h5>
           <p class="card-text mb-1">
             <strong>Price:</strong> ${{ number_format($product->price, 2) }}
