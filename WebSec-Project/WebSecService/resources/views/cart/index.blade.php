@@ -237,8 +237,24 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // … your payment-method toggle code …
+  const paymentMethodSelect = document.getElementById('payment_method');
+  const cardDetails = document.getElementById('card-details');
 
+  function toggleCardDetails() {
+    if (paymentMethodSelect.value === 'card') {
+      cardDetails.style.display = 'block';
+    } else {
+      cardDetails.style.display = 'none';
+    }
+  }
+
+  // Initialize visibility on load
+  toggleCardDetails();
+
+  // Listen for changes
+  paymentMethodSelect.addEventListener('change', toggleCardDetails);
+
+  // Existing location code
   window.getLocation = function() {
     const status = document.getElementById('location-status');
     status.textContent = '';
@@ -253,15 +269,10 @@ document.addEventListener('DOMContentLoaded', function() {
       (pos) => {
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
-
-        // hidden fields
         document.getElementById('lat').value = lat;
         document.getElementById('lng').value = lng;
-
-        // fill address field so validation passes
         const locInput = document.getElementById('location');
         locInput.value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-
         status.textContent = 'Location shared!';
       },
       (err) => {
@@ -272,5 +283,6 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 });
 </script>
+
 
 @endsection

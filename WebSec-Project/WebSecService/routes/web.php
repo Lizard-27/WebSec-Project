@@ -19,7 +19,7 @@ Route::get('login',    [UsersController::class, 'login'])     ->name('login');
 Route::post('login',   [UsersController::class, 'doLogin'])   ->name('do_login');
 Route::get('logout',   [UsersController::class, 'doLogout'])  ->name('do_logout');
 
-// Social logins
+// Social logins...
 Route::get('auth/google',   [UsersController::class, 'redirectToGoogle'])  ->name('auth.google');
 Route::get('auth/google/callback', [UsersController::class, 'handleGoogleCallback']);
 Route::get('auth/twitter',  [UsersController::class, 'redirectToTwitter']) ->name('auth.twitter');
@@ -55,50 +55,47 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('products', [ProductsController::class, 'list'])
      ->name('products_list');
 
-// 2️⃣ Product details & purchase form
-Route::get('products/{id}', [ProductsController::class, 'show'])
-     ->name('products.show')
-     ->middleware('auth');
-
-// 3️⃣ Handle purchase submission
-Route::post('products/{id}/purchase', [ProductsController::class, 'purchase'])
-     ->name('products.purchase')
-     ->middleware('auth');
-
-// 4️⃣ Purchase history
-Route::get('my-purchases', [ProductsController::class, 'myProducts'])
-     ->name('my_purchases')
-     ->middleware('auth');
-
-// 5️⃣ Admin: add/edit/delete products
+// 2️⃣ Admin: add/edit/delete products (static before `{id}`)
 Route::get('products/create', [ProductsController::class, 'edit'])
-     ->name('products_create');
+     ->name('products_create')
+     ->middleware('auth');
+
 Route::get('products/edit/{product?}', [ProductsController::class, 'edit'])
      ->name('products_edit')
      ->middleware('auth');
+
 Route::post('products/save/{product?}', [ProductsController::class, 'save'])
      ->name('products_save')
      ->middleware('auth');
+
 Route::get('products/delete/{product}', [ProductsController::class, 'delete'])
      ->name('products_delete')
      ->middleware('auth');
 
+// 3️⃣ Product details & purchase form (catch-all `{id}`)
+Route::get('products/{id}', [ProductsController::class, 'show'])
+     ->name('products.show')
+     ->middleware('auth');
+
+// 4️⃣ Handle purchase submission
+Route::post('products/{id}/purchase', [ProductsController::class, 'purchase'])
+     ->name('products.purchase')
+     ->middleware('auth');
+
+// 5️⃣ Purchase history
+Route::get('my-purchases', [ProductsController::class, 'myProducts'])
+     ->name('my_purchases')
+     ->middleware('auth');
 
 
+// Cart routes
 Route::middleware('auth')->group(function(){
     Route::get('cart', [CartController::class,'index'])->name('cart.index');
     Route::post('cart/add/{product}', [CartController::class,'add'])->name('cart.add');
     Route::post('cart/item/{item}/update', [CartController::class,'update'])->name('cart.update');
     Route::delete('cart/item/{item}', [CartController::class,'remove'])->name('cart.remove');
-    Route::post('cart/checkout', [CartController::class,'checkout'])
-         ->name('cart.checkout');
-    Route::get('cart', [CartController::class,'index'])
-         ->name('cart.index');
+    Route::post('cart/checkout', [CartController::class,'checkout'])->name('cart.checkout');
 });
-
-
-
-
 
 // OIDC discovery document
 Route::get('/.well-known/openid-configuration', function () {
@@ -123,11 +120,10 @@ Route::get('/oauth/jwks', function () {
 });
 
 Route::get('/callback', function (Request $request) {
-    // Dump out everything so you can see the `code` parameter
     return response()->json($request->all());
 });
 
-
+// Delivery routes
 Route::middleware('auth')
      ->prefix('delivery')
      ->name('delivery.')
