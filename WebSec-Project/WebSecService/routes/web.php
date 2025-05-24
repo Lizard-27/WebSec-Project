@@ -91,48 +91,51 @@ Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 
 
+// 4️⃣ Purchase history – must come *before* products/{product}
+Route::get('my-purchases', [ProductsController::class, 'myProducts'])
+     ->middleware('auth:web')
+     ->name('my_purchases');
+
 // 1️⃣ Product catalog
 Route::get('products', [ProductsController::class, 'list'])
      ->name('products_list');
 
-// 2️⃣ Product details & purchase form
+// ★ Create form (static)
+Route::get('products/create', [ProductsController::class, 'edit'])
+     ->middleware('auth:web')
+     ->name('products_create');
+
+// ★ Edit form (static)
+Route::get('products/edit/{product?}', [ProductsController::class, 'edit'])
+     ->middleware('auth:web')
+     ->name('products_edit');
+
+// ★ Save (static)
+Route::post('products/save/{product?}', [ProductsController::class, 'save'])
+     ->middleware('auth:web')
+     ->name('products_save');
+
+// ★ Delete (static)
+Route::get('products/delete/{product}', [ProductsController::class, 'delete'])
+     ->middleware('auth:web')
+     ->name('products_delete');
+
+// 2️⃣ Now your dynamic routes
 // Show dish detail + rating form
 Route::get('products/{product}', [ProductsController::class, 'show'])
      ->middleware('auth:web')
      ->name('products.show');
 
-// ★ Submit a rating for a dish
+// Submit a rating
 Route::post('products/{product}/rate', [ProductsController::class, 'rate'])
      ->middleware('auth:web')
      ->name('products.rate');
 
+// Purchase
+Route::post('products/{product}/purchase', [ProductsController::class, 'purchase'])
+     ->middleware('auth:web')
+     ->name('products.purchase');
 
-// 3️⃣ Handle purchase submission
-Route::post('products/{id}/purchase', [ProductsController::class, 'purchase'])
-     ->name('products.purchase')
-     ->middleware('auth');
-
-// 4️⃣ Purchase history
-Route::get('my-purchases', [ProductsController::class, 'myProducts'])
-     ->name('my_purchases')
-     ->middleware('auth');
-
-// 5️⃣ Admin: add/edit/delete products
-Route::get('products/create', [ProductsController::class, 'edit'])
-     ->name('products_create')
-     ->middleware('auth');
-
-Route::get('products/edit/{product?}', [ProductsController::class, 'edit'])
-     ->name('products_edit')
-     ->middleware('auth');
-
-Route::post('products/save/{product?}', [ProductsController::class, 'save'])
-     ->name('products_save')
-     ->middleware('auth');
-
-Route::get('products/delete/{product}', [ProductsController::class, 'delete'])
-     ->name('products_delete')
-     ->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------
