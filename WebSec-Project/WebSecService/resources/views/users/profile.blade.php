@@ -275,22 +275,28 @@
                     </div>
                 @endif
 
-                {{-- 3) Other action buttons --}}
+                {{-- 3) Change Password: visible to self or admin --}}
                 @if (auth()->user()->hasPermissionTo('admin_users') || auth()->id() == $user->id)
                     <a class="btn btn-primary" href="{{ route('edit_password', $user->id) }}">
                         Change Password
                     </a>
+                @endif
+
+                {{-- 4) Add Role: visible ONLY to users with 'admin_users' permission --}}
+                @if (auth()->user()->hasPermissionTo('admin_users'))
                     <a class="btn btn-primary" href="{{ route('users_add_role', $user->id) }}">
                         Add Role
                     </a>
                 @endif
-                
+
+                {{-- 5) Edit Profile: visible to self or users with 'edit_users' --}}
                 @if (auth()->user()->hasPermissionTo('edit_users') || auth()->id() == $user->id)
                     <a href="{{ route('users_edit', $user->id) }}" class="btn btn-danger">
                         Edit Profile
                     </a>
                 @endif
             </div>
+
         </div>
     </div>
 </div>

@@ -333,9 +333,6 @@ public function handleGoogleCallback()
             $role->syncPermissions($request->permissions);
         }
 
-        // Assign the role to the user
-        $user->assignRole($role);
-
         return redirect(route('profile', ['user' => $user->id]))->with('success', 'New role created and assigned successfully');
     }
 
